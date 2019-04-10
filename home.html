@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Billing Software</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="reset.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+ 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"></script>	
+</head>
+<style>
+	button{
+		width: 120px;
+		height: 30px;
+		border-radius: 10px;
+		border: none;
+	}
+	.bb{
+		margin-top: 30px;
+		margin-bottom: 30px;
+		border: 2px solid black;
+		border-radius: 2px 50px;
+		box-shadow: 20px 20px 120px 16px black;
+	}
+</style>
+<body class="body text-center">
+	<div class="container bg-light bb">
+		<div class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12">
+				<h1>Billing</h1>
+				<div class="row bg-info">
+					<div class="col-sm-6 col-md-6 mt-3 mb-3">
+						<button><a href="index.html">Admin</a></button>
+					</div>
+					<div class="col-sm-6 col-md-6 mt-3 mb-3">
+						<button><a href="inventry.html">Inventry</a></button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6">
+						<p id="date"></p>
+					</div>
+					<div class="col-md-6">
+						<p id="time"></p>
+					</div>					
+				</div>
+				<img src="img/rube.jpg" style="width: 420px; height: 120px;" class="img-fluid"><br><br>
+				<p>Adyar</p>
+				<p>Chennai 600020</p><hr>
+				
+				<div class="row"> 
+					<div class="col-md-4">
+						<select class="form-control" id="select">
+							
+						</select><br>
+					</div>
+					<div class="col-md-4">
+						<input type="number" name="" placeholder="Enter Here" class="form-control" id="qnt"><br>
+					</div>
+					<div class="col-md-4">
+						<button type="button" class="btn btn-primary p-0" onclick="add()">Add</button>
+					</div>
+				</div><hr>
+			
+				<div class="row">
+	                <div class="col-md-12">
+	                    <table class="table table-striped">
+	                        <thead>
+	                            <tr>
+	                            	<th>Name</th>
+	                            	<th>Quantity</th>
+	                            	<th>price</th>
+	                        	</tr>
+	                        </thead>
+	                        <tbody id="tbody">
+
+	                        </tbody>
+	                    </table><hr>
+	                    <div class="total text-right mr-5">
+                   			Total: RS <span id="total" style="font-size:20px; margin-right:150px;"></span>
+                   		</div><hr>
+	                </div>
+	            </div>
+	            <div class="row img-fluid pl-4">
+					<div class="col-md-3">
+						<img src="img/fish.jpg" style="width: 100%; height: 180px;">
+					</div>
+
+					<div class="col-md-3">
+						<img src="img/65.jpg" style="width: 100%; height: 180px;">
+					</div>
+
+					<div class="col-md-3">
+						<img src="img/ckn.jpg" style="width: 100%; height: 180px;">
+					</div>
+
+					<div class="col-md-3">
+						<img src="img/panner.jpg" style="width: 100%; height: 180px;">
+					</div>
+				</div><hr>
+	            <footer class="bg-dark text-center text-white">
+	            	<p>©rube_nila@gmail.com<br>Adyar,Chennai</p>
+	            </footer>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+function timeFunction(){
+var currentTime = new Date(),
+	myTime,
+      hours = currentTime.getHours(),
+      minutes = currentTime.getMinutes();
+
+	if (minutes < 10) {
+	 minutes = "0" + minutes;
+  }
+
+	var suffix = "AM";
+	if (hours >= 12) {
+    suffix = "PM";
+    hours = hours - 12;
+	}
+	if (hours == 0) {
+	 hours = 12;
+	}
+ return myTime=hours + ":" + minutes + " " + suffix
+
+}
+document.getElementById('time').innerHTML=timeFunction();
+
+function dateFunction(){
+ var currentDate = new Date(),
+      myDate,
+      day = currentDate.getDate(),
+      month = currentDate.getMonth() + 1,
+      year = currentDate.getFullYear();
+     return myDate=day + "/" + month + "/" + year;
+}
+      document.getElementById('date').innerHTML=dateFunction();
+
+var user=[];
+
+        		var data1 = JSON.parse(localStorage.getItem('billing'));
+                for(let i=0;i<data1.length;i++){
+                       user.push(data1[i]);       	
+                }
+                    var amount=[];
+
+function add(){
+	var collection =[];
+	var price;
+	var ft='';
+	var cur;
+	var select = document.getElementById('select').value;
+	var qnt = document.getElementById('qnt').value;
+
+var data = JSON.parse(localStorage.getItem('billing'));
+for(let i=0;i<data.length;i++){
+ if(data[i].foodname == select){
+  price = data[i].price;
+ }
+}
+ cur =price*qnt
+
+let data1  = {
+	foodname:select,
+	qnt:qnt,
+	price:cur
+}
+collection.push(data1);
+// amount.push(collection[i].price);
+for(let i=0;i<collection.length;i++){
+	document.getElementById('tbody').innerHTML += '<td>'+collection[i].foodname+'</td>'+'<td>'+collection[i].qnt+'</td>'+'<td>'+collection[i].price+'</td>'
+	amount.push(collection[i].price);
+		console.log(amount);
+
+}
+for(let j=0;j<amount.length;j++){
+ft = eval(ft+amount[j]);
+document.getElementById('total').innerHTML=ft;
+console.log(ft)	
+}
+
+
+}
+var data = JSON.parse(localStorage.getItem('billing'));
+console.log(data)
+for(let i=0;i<data.length;i++){
+	document.getElementById('select').innerHTML += '<option>'+data[i].foodname+'</option>'
+}
+
+
+</script>
+</html>
